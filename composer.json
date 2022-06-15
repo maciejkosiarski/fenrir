@@ -9,12 +9,21 @@
         "php": ">=8.1.6",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "doctrine/doctrine-bundle": "2.6.3",
+        "doctrine/doctrine-migrations-bundle": "3.2.2",
+        "doctrine/orm": "2.12.2",
         "symfony/console": "v6.1.0",
         "symfony/dotenv": "v6.1.0",
         "symfony/flex": "v2.2.0",
         "symfony/framework-bundle": "v6.1.0",
+        "symfony/proxy-manager-bridge": "6.1.0",
         "symfony/runtime": "v6.1.0",
         "symfony/yaml": "v6.1.0"
+    }
+    ,
+    "require-dev": {
+        "roave/security-advisories": "dev-latest",
+        "symfony/maker-bundle": "^1.43"
     },
     "config": {
         "allow-plugins": {
