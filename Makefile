@@ -11,16 +11,16 @@ PHP_CONT = $(DOCKER_COMP) exec php
 PHP      = $(PHP_CONT) php
 COMPOSER = $(PHP_CONT) composer
 SYMFONY  = $(PHP_CONT) bin/console
+PLATFORM ?= $(shell uname -s)
 
 #-----------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
 ## —— 🎵 🐳 The Symfony-docker Makefile 🐳 🎵 ——————————————————————————————————
-ARG := $(word 2, $(MAKECMDGOALS))
 %:
 	@:
 
 test-run: ## Print platform
-	@echo $(PLATFORM)
+	@echo $(PLATFORM) ${ARGS}
 
 help: ## Outputs this help screen
 	@echo "\033[1m make [TARGET] \033[0m"
@@ -28,6 +28,9 @@ help: ## Outputs this help screen
 
 ## —— Docker 🐳 ————————————————————————————————————————————————————————————————
 build: ## Build base and dev image to start development
+	$(DOCKER_COMP) build --pull
+
+build-no-cache: ## Build base and dev image to start development with no cache
 	$(DOCKER_COMP) build --pull --no-cache
 
 up: ## Start the project docker containers
@@ -53,7 +56,7 @@ sh: ## Connect to the PHP FPM container
 
 ## —— Composer 🧙 ——————————————————————————————————————————————————————————————
 composer: ## Run composer, pass the argument after composer to run a given command, example: make composer 'req symfony/orm-pack'
-	@$(COMPOSER) ${ARG}
+	@$(COMPOSER) $(filter-out $@,$(MAKECMDGOALS))
 
 vendor: ## Install vendors according to the current composer.lock file
 vendor: c=install --prefer-dist --no-dev --no-progress --no-scripts --no-interaction
@@ -61,7 +64,7 @@ vendor: composer
 
 ## —— Symfony 🎵 ———————————————————————————————————————————————————————————————
 sf: ## List all Symfony commands or pass the argument after make sf to run a given command, example: make sf about
-	@$(SYMFONY) ${ARG}
+	@$(SYMFONY) $(filter-out $@,$(MAKECMDGOALS))
 
 cc: c=c:c ## Clear the cache
 cc: sf

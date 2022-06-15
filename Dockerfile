@@ -17,7 +17,9 @@ RUN apk add --no-cache \
 		file \
 		gettext \
 		git \
-	;
+    	vim \
+    	sqlite-dev \
+    ;
 
 ARG APCU_VERSION=5.1.21
 RUN set -eux; \
@@ -93,6 +95,10 @@ RUN composer create-project "${SKELETON} ${SYMFONY_VERSION}" . --stability=$STAB
 	composer clear-cache
 
 ###> recipes ###
+###> doctrine/doctrine-bundle ###
+RUN docker-php-ext-install pdo_sqlite \
+	&& docker-php-ext-enable pdo_sqlite
+###< doctrine/doctrine-bundle ###
 ###< recipes ###
 
 COPY . .
